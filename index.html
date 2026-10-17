@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#121110">
+  <title>Пульт курорта · BARS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 44 44" aria-hidden="true">
+        <path d="M22 2 L40 12 L40 32 L22 42 L4 32 L4 12 Z" fill="#312b25"/>
+        <g fill="#4a4239"><path d="M9 14 L16 11 L18 17 L12 20 Z"/><path d="M28 9 L35 13 L32 18 L27 15 Z"/><path d="M8 25 L14 23 L15 30 L10 32 Z"/><path d="M29 28 L36 25 L35 32 L30 34 Z"/><path d="M18 33 L25 32 L24 38 L19 38 Z"/></g>
+        <path d="M14 23 C17 17 27 16 32 21 C28 27 19 29 14 23 Z" fill="#00824a"/>
+        <circle cx="23.5" cy="22" r="3.2" fill="#312b25"/><circle cx="24.6" cy="21" r="1" fill="#fff"/>
+      </svg>
+      <div class="wordmark"><b>BARS</b><small>платежно-пропускные системы</small></div>
+      <div>
+        <div class="brand-name">ГЛК «Северный склон»</div>
+        <div class="brand-sub">Пульт руководителя курорта</div>
+      </div>
+    </div>
+    <div class="weather" id="weather"></div>
+    <div class="clock-box">
+      <span class="live"><span class="dot"></span>LIVE</span>
+      <div>
+        <div class="clock num" id="clock">12:30</div>
+        <div class="date">суббота, 16 января</div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="seg" id="speed" title="Скорость демо-времени">
+        <button data-speed="0" aria-label="Пауза">❚❚</button>
+        <button data-speed="1">×1</button>
+        <button data-speed="60" class="on">×60</button>
+        <button data-speed="300">×300</button>
+      </div>
+      <select id="scenario" aria-label="Сценарий дня">
+        <option value="normal">Обычная суббота</option>
+        <option value="peak">Праздничный пик</option>
+        <option value="storm">Ветер и метель</option>
+      </select>
+      <button class="iconbtn" id="fs" title="На весь экран" aria-label="На весь экран">⛶</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="kpis span-12" id="kpis"></section>
+
+    <section class="panel span-8 map-panel">
+      <div class="panel-h">
+        <h2>Курорт онлайн</h2>
+        <span class="sub">загрузка трасс как пробки на дороге · наведите на трассу или подъёмник</span>
+        <div class="seg view-seg right" id="viewSeg" title="Вид карты">
+          <button data-view="3d" class="on">3D</button><button data-view="2d">2D</button>
+        </div>
+        <div class="legend-traffic">
+          <span>свободно</span><i class="lt-bar"></i><span>перегружена</span>
+          <span class="lt-note"><svg viewBox="-6 -9 12 15" width="10" height="13"><use href="#sk-ico"/></svg> ≈ 4 гостя</span>
+        </div>
+      </div>
+      <div class="map-wrap" id="mapWrap">
+        <svg id="map" viewBox="0 0 1000 610" preserveAspectRatio="xMidYMid meet"></svg>
+        <div id="map3d"><div class="lbl3d" id="lbl3d"></div><div class="hint3d">потяните, чтобы повернуть гору</div></div>
+        <div class="tip" id="tip"></div>
+      </div>
+      <div class="map-hint">← листайте карту пальцем, нажмите на трассу →</div>
+      <div class="slope-chips" id="slopeChips"></div>
+    </section>
+
+    <aside class="panel span-4 side">
+      <div class="panel-h"><h2>Подъёмники</h2><span class="sub">очереди и провозная способность</span></div>
+      <div id="lifts" class="lifts"></div>
+      <div class="panel-h mt"><h2>Умные подсказки</h2><span class="sub">что сделать прямо сейчас</span></div>
+      <div id="insights" class="insights"></div>
+    </aside>
+
+    <section class="panel span-6">
+      <div class="panel-h"><h2>Выручка за день</h2><span class="sub">факт, план и прогноз до закрытия</span></div>
+      <div class="statrow" id="revStats"></div>
+      <svg id="revChart" class="chart" viewBox="0 0 640 240" preserveAspectRatio="none"></svg>
+      <div class="chart-legend">
+        <span><i style="background:#1db56c"></i>Сегодня</span>
+        <span><i class="dotted"></i>Прогноз</span>
+        <span><i class="dashed"></i>План</span>
+        <span><i style="background:#7a7366"></i>Прошлая суббота</span>
+      </div>
+    </section>
+
+    <section class="panel span-3">
+      <div class="panel-h"><h2>Тарифы</h2><span class="sub">ски-пассы сегодня</span></div>
+      <div class="donut-wrap"><svg id="donut" viewBox="0 0 180 180"></svg></div>
+      <div id="tariffs" class="legend-table"></div>
+    </section>
+
+    <section class="panel span-3">
+      <div class="panel-h"><h2>Направления</h2><span class="sub">выручка по бизнесам</span></div>
+      <div id="biz" class="bars"></div>
+      <div class="panel-h mt"><h2>Каналы продаж</h2></div>
+      <div id="channels"></div>
+    </section>
+
+    <section class="panel span-5">
+      <div class="panel-h"><h2>Турникеты</h2><span class="sub">проходы и защита от злоупотреблений</span></div>
+      <div class="statrow" id="turnStats"></div>
+      <div class="gates" id="gates"></div>
+      <ul class="feed" id="feed"></ul>
+    </section>
+
+    <section class="panel span-7">
+      <div class="panel-h"><h2>Прокат</h2><span class="sub">где оборудование: на складах, на склонах, в сервисе</span></div>
+      <div class="statrow" id="rentStats"></div>
+      <div class="rent-grid">
+        <div id="rentTable" class="rent-table"></div>
+        <svg id="rentFlow" class="rent-flow" viewBox="0 0 420 230"></svg>
+      </div>
+      <div class="sizes"><span class="sizes-l">Ботинки — дефицит размеров:</span><span id="sizes"></span></div>
+    </section>
+
+    <section class="panel span-6">
+      <div class="panel-h"><h2>Раздевалки</h2><span class="sub">шкафчики онлайн</span>
+        <div class="legend-cells right">
+          <span><i class="c-free"></i>свободен</span><span><i class="c-busy"></i>занят</span><span><i class="c-long"></i>дольше 5 ч</span><span><i class="c-broken"></i>неисправен</span>
+        </div>
+      </div>
+      <div class="statrow" id="lockStats"></div>
+      <div class="rooms" id="rooms"></div>
+    </section>
+
+    <section class="panel span-3">
+      <div class="panel-h"><h2>Инфраструктура</h2></div>
+      <div id="infra" class="infra"></div>
+    </section>
+
+    <section class="panel span-3">
+      <div class="panel-h"><h2>Приход гостей</h2><span class="sub">по часам</span></div>
+      <svg id="hours" class="chart" viewBox="0 0 300 170" preserveAspectRatio="none"></svg>
+      <div class="chart-legend"><span><i style="background:#9bd36a"></i>Сегодня</span><span><i style="background:#3a362f"></i>Прошлая суббота</span></div>
+      <div class="note" id="hoursNote"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    Демо-модель · данные симулированы в браузере · в боевой версии источник — ППС «Барс», BI-отчёты, BarsPay, КСО
+  </footer>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs><g id="sk-ico" fill="#f2efe9" stroke="#f2efe9"><circle cy="-6.4" r="2.1"/><path d="M0,-4.2 L0.6,1 M-3,-2.2 L3.2,-1 M0.6,1 L-2.2,4.2 M0.6,1 L2.8,4 M-4.6,5 L4.6,3.8" fill="none" stroke-width="1.5" stroke-linecap="round"/></g></defs>
+  </svg>
+
+  <script src="js/sim.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/ui.js"></script>
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+  <script type="module" src="js/map3d.js"></script>
+</body>
+</html>
